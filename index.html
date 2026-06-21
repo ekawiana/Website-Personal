@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Tugas — Toko Produktivitas Harian</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="counter">
+    <div class="receipt" id="receipt">
+
+      <header class="receipt-head">
+        <h1>DAFTAR TUGAS</h1>
+        <p class="subtitle">Toko Produktivitas Harian</p>
+      </header>
+
+      <div class="divider dashed"></div>
+
+      <div class="meta-row">
+        <span id="todayDate">Tgl: --</span>
+        <span id="receiptNumber">No: ----</span>
+      </div>
+
+      <div class="divider dashed"></div>
+
+      <!-- Form untuk menambah tugas baru -->
+      <form id="addForm" class="add-row" autocomplete="off">
+        <label for="taskInput" class="sr-only">Nama tugas baru</label>
+        <input type="text" id="taskInput" name="taskInput" placeholder="Tambah tugas baru..." maxlength="80" required>
+        <button type="submit" class="btn-add" aria-label="Tambah tugas">+</button>
+      </form>
+
+      <div class="divider dashed"></div>
+
+      <!-- Tombol untuk menyaring tampilan daftar tugas -->
+      <div class="filter-row" id="filterRow" role="tablist" aria-label="Filter tugas">
+        <button class="filter-btn is-active" data-filter="semua" role="tab" aria-selected="true">Semua</button>
+        <button class="filter-btn" data-filter="aktif" role="tab" aria-selected="false">Aktif</button>
+        <button class="filter-btn" data-filter="selesai" role="tab" aria-selected="false">Selesai</button>
+      </div>
+
+      <div class="divider dashed"></div>
+
+      <!-- Daftar tugas akan digambar di sini oleh script.js -->
+      <ul class="task-list" id="taskList" aria-live="polite"></ul>
+      <p class="empty-state" id="emptyState" hidden>-- BELUM ADA TUGAS --</p>
+
+      <div class="divider dashed"></div>
+
+      <!-- Ringkasan jumlah tugas, dihitung otomatis -->
+      <div class="summary" id="summary">
+        <div class="summary-row"><span>TOTAL TUGAS</span><span id="sumTotal">0</span></div>
+        <div class="summary-row"><span>SELESAI</span><span id="sumDone">0</span></div>
+        <div class="summary-row"><span>SISA</span><span id="sumLeft">0</span></div>
+      </div>
+
+      <div class="divider dashed"></div>
+
+      <button class="btn-clear" id="clearBtn" type="button">✂ Bersihkan yang Selesai</button>
+
+      <div class="barcode" aria-hidden="true"></div>
+      <p class="thanks">Terima kasih! Tetap produktif hari ini :)</p>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

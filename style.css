@@ -1,0 +1,244 @@
+/* =======================================================
+   DESAIN: "Struk Belanja" To-Do List
+   Palet warna & font sengaja dibuat seperti nota kasir asli
+   biar nggak terasa kayak template web generik.
+   ======================================================= */
+
+:root {
+  --counter: #c9c2b0;       /* warna meja kasir / latar belakang halaman */
+  --paper: #faf6ec;         /* warna kertas struk */
+  --ink: #2b2722;           /* warna teks utama, hitam kecoklatan ala tinta */
+  --ink-faded: #8c8474;     /* teks sekunder, kesan tinta thermal yang pudar */
+  --stamp-red: #ae3b2e;     /* warna aksen untuk hapus / void */
+  --stamp-green: #3e7a52;   /* warna aksen untuk stempel "selesai" */
+  --mustard: #c99a3e;       /* warna fokus / hover */
+  --font-display: 'Oswald', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  background-color: var(--counter);
+  /* tekstur halus seperti permukaan meja kayu */
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.035) 0px,
+    rgba(0, 0, 0, 0.035) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+  font-family: var(--font-mono);
+  color: var(--ink);
+}
+
+/* ===== Kartu struk utama ===== */
+.receipt {
+  position: relative;
+  width: min(420px, 100%);
+  background: var(--paper);
+  padding: 40px 28px 30px;
+  transform: rotate(-1deg);
+  /* bentuk zigzag di atas & bawah, seperti kertas struk yang disobek */
+  clip-path: polygon(
+    0% 10px, 10% 0%, 20% 10px, 30% 0%, 40% 10px, 50% 0%, 60% 10px, 70% 0%, 80% 10px, 90% 0%, 100% 10px,
+    100% calc(100% - 10px), 90% 100%, 80% calc(100% - 10px), 70% 100%, 60% calc(100% - 10px), 50% 100%,
+    40% calc(100% - 10px), 30% 100%, 20% calc(100% - 10px), 10% 100%, 0% calc(100% - 10px)
+  );
+  filter:
+    drop-shadow(0 16px 28px rgba(0, 0, 0, 0.32))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+}
+
+.receipt-head { text-align: center; }
+.receipt-head h1 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0 0 2px;
+}
+.subtitle {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+
+.divider.dashed {
+  border-top: 1px dashed var(--ink-faded);
+  opacity: 0.6;
+  margin: 14px 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+}
+
+/* ===== Form tambah tugas ===== */
+.add-row { display: flex; gap: 8px; }
+#taskInput {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border: 1px dashed var(--ink-faded);
+  background: transparent;
+  color: var(--ink);
+}
+#taskInput:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
+
+.btn-add {
+  width: 40px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  cursor: pointer;
+}
+.btn-add:hover { background: var(--mustard); }
+.btn-add:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
+
+/* ===== Tombol filter ===== */
+.filter-row { display: flex; gap: 6px; justify-content: center; }
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid var(--ink-faded);
+  color: var(--ink-faded);
+  cursor: pointer;
+}
+.filter-btn.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.filter-btn:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
+
+/* ===== Daftar tugas, masing-masing tampil seperti satu baris item di struk ===== */
+.task-list { list-style: none; margin: 0; padding: 0; }
+.task-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 0;
+  font-size: 0.85rem;
+}
+.task-index { font-size: 0.7rem; color: var(--ink-faded); }
+.task-text {
+  border-bottom: 1px dotted var(--ink-faded);
+  padding-bottom: 2px;
+  overflow-wrap: anywhere;
+}
+.task-item.is-done .task-text {
+  text-decoration: line-through;
+  color: var(--ink-faded);
+}
+
+.task-actions { display: flex; gap: 4px; }
+.btn-check, .btn-delete {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--ink-faded);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.btn-check { color: var(--stamp-green); }
+.btn-delete { color: var(--stamp-red); }
+.btn-check:focus-visible, .btn-delete:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
+
+/* "Stempel" yang muncul saat tugas ditandai selesai */
+.stamp {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  border: 2px solid var(--stamp-green);
+  color: var(--stamp-green);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  pointer-events: none;
+  opacity: 0.85;
+  transform: translateY(-50%) rotate(-10deg);
+  animation: stampIn 0.3s ease-out;
+}
+@keyframes stampIn {
+  from { opacity: 0; transform: translateY(-50%) scale(2) rotate(-18deg); }
+  to   { opacity: 0.85; transform: translateY(-50%) scale(1) rotate(-10deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp { animation: none; }
+}
+
+.empty-state {
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faded);
+  padding: 18px 0;
+}
+
+/* ===== Ringkasan jumlah tugas ===== */
+.summary-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 2px 0; }
+.summary-row span:last-child { font-weight: 700; }
+
+.btn-clear {
+  display: block;
+  margin: 8px auto 0;
+  background: transparent;
+  border: 1px dashed var(--stamp-red);
+  color: var(--stamp-red);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.btn-clear:hover { background: var(--stamp-red); color: var(--paper); }
+.btn-clear:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
+
+/* Garis dekoratif ala barcode, hanya hiasan */
+.barcode {
+  height: 32px;
+  margin: 16px 0 8px;
+  opacity: 0.8;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px, transparent 2px 4px,
+    var(--ink) 4px 5px, transparent 5px 9px,
+    var(--ink) 9px 12px, transparent 12px 15px
+  );
+}
+
+.thanks { text-align: center; font-size: 0.72rem; color: var(--ink-faded); margin: 0; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .receipt { padding: 32px 18px 24px; }
+  .receipt-head h1 { font-size: 1.55rem; }
+}
